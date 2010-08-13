@@ -1,0 +1,3 @@
+sqlite3:
+  :adapter: sqlite3
+  :database: vendor/plugins/acts_as_microblog/test/acts_as_microblog_plugin.sqlite3.db

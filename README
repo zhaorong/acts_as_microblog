@@ -1,0 +1,48 @@
+ActsAsMicroblog
+===============
+
+Introduction goes here.
+
+Usage
+=====
+
+1.database migrate
+$> ruby script/generate microblog
+This will create:
+  db/migrate/XXXXXXXXXXXXXXX_create_microblogs_and_microblog_followings.rb
+$> rake db:migrate
+    
+2.acts_as_microblog_author
+在你的用户类中添加acts_as_microblog_author（确保系统中有且只有一个类调用了该方法），
+  以用户类User为例（你的用户类可以是任何名称）
+class User < ActiveRecord::Base
+  acts_as_microblog_author
+end
+uf = User.first
+uf.microblogs        # => []
+uf.microblogs.create :content => '大事小事都可以在这里写，不过每条围脖字数不能超过140'
+uf.microblogs.size   # => 1
+uf.microblogs.first.author == uf # => true
+			
+ul = User.last
+uf.follow ul         # => uf
+uf.follow? ul        # => true
+ul.follower_ids      # => [uf.id]
+uf.following_ids     # => [ul.id]
+uf.unfollow ul       # => uf
+uf.follow? ul        # => false
+ul.follower_ids      # => []
+uf.following_ids     # => []
+
+3.acts_as_microblog_subject
+系统中若有跟围脖 1:N 关系的model,在model中添加如下方法（以Post为例）：
+class User < ActiveRecord::Base
+  acts_as_microblog_subject :has_many => :comments
+end
+pf = Post.first
+pf.comments          # => []
+pf.comments.create :author_id => 1, :content => '第一片文章的第一个评论'
+pf.comments.size     # => 1
+
+
+Copyright (c) 2010 [name of plugin creator], released under the MIT license

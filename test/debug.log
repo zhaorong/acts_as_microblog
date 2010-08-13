@@ -1,0 +1,1862 @@
+# Logfile created on Wed Jul 28 16:44:41 +0800 2010 by logger.rb/22285
+  [4;36;1mSQL (1.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (21.5ms)[0m   [0;1mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (34.4ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (149.5ms)[0m   [0;1mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("microblogs")[0m
+  [4;36;1mSQL (33.5ms)[0m   [0;1mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (31.3ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (17.0ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (24.5ms)[0m   [0;1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("schema_migrations")[0m
+  [4;36;1mSQL (32.8ms)[0m   [0;1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mSQL (57.5ms)[0m   [0mINSERT INTO "schema_migrations" (version) VALUES ('0')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.9ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:44:41', '2010-07-28 08:44:41', 'Tom')[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:44:41', '2010-07-28 08:44:41', 'Jack')[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 08:44:41', 'Tom post', '2010-07-28 08:44:41', 1, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:44:41', '2010-07-28 08:44:41', 'Jack comment', 2, 'Post', 1)[0m
+  [4;36;1mSQL (10.9ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:44:41', '2010-07-28 08:44:41', 'Tom comment', 1, 'Post', 1)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.4ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 1) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:44:41', '2010-07-28 08:44:41', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (9.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (104.0ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (61.5ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (13.8ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (134.6ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (34.0ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (18.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (16.1ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (34.0ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (27.7ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (32.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (1.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:45:07', '2010-07-28 08:45:07', 'Tom')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:45:07', '2010-07-28 08:45:07', 'Jack')[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 08:45:07', 'Tom post', '2010-07-28 08:45:07', 1, 'post content')[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:45:07', '2010-07-28 08:45:07', 'Jack comment', 2, 'Post', 1)[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mMicroblog Create (1.2ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:45:07', '2010-07-28 08:45:07', 'Tom comment', 1, 'Post', 1)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mMicroblog Load (0.3ms)[0m   [0;1mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 1) LIMIT 1[0m
+  [4;35;1mMicroblog Create (0.5ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:45:07', '2010-07-28 08:45:07', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (15.9ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (13.8ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (8.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (45.9ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (15.0ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (13.0ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (3.9ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (39.3ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (47.4ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (14.6ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (44.3ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:49:23', '2010-07-28 08:49:23', 'Tom')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:49:24', '2010-07-28 08:49:24', 'Jack')[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 08:49:24', 'Tom post', '2010-07-28 08:49:24', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:49:24', '2010-07-28 08:49:24', 'Tom')[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:49:24', '2010-07-28 08:49:24', 'Jack')[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.5ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 08:49:24', 'Tom post', '2010-07-28 08:49:24', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:49:24', '2010-07-28 08:49:24', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.5ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:49:24', '2010-07-28 08:49:24', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:49:24', '2010-07-28 08:49:24', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (19.5ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (31.8ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (17.3ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (42.3ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (1.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (31.3ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (14.8ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (21.3ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (11.3ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (14.9ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (53.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (2.6ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:59:28', '2010-07-28 08:59:28', 'Tom')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:59:28', '2010-07-28 08:59:28', 'Jack')[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 08:59:28', 'Tom post', '2010-07-28 08:59:28', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:59:28', '2010-07-28 08:59:28', 'Tom')[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 08:59:28', '2010-07-28 08:59:28', 'Jack')[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.5ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 08:59:28', 'Tom post', '2010-07-28 08:59:28', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.8ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:59:28', '2010-07-28 08:59:28', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.6ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:59:28', '2010-07-28 08:59:28', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.5ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 08:59:28', '2010-07-28 08:59:28', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.0ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (32.1ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (16.4ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (15.0ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (14.0ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (30.5ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (36.8ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (28.2ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (8.8ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (48.6ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (63.0ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (24.5ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (12.4ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (21.4ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (6.4ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (37.5ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (18.9ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (14.9ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (38.7ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (38.0ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (16.7ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 09:04:05', '2010-07-28 09:04:05', 'Tom')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 09:04:06', '2010-07-28 09:04:06', 'Jack')[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 09:04:06', 'Tom post', '2010-07-28 09:04:06', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 09:04:06', '2010-07-28 09:04:06', 'Tom')[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 09:04:06', '2010-07-28 09:04:06', 'Jack')[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 09:04:06', 'Tom post', '2010-07-28 09:04:06', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 09:04:06', '2010-07-28 09:04:06', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 09:04:06', '2010-07-28 09:04:06', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 09:04:06', '2010-07-28 09:04:06', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (8.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (20.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (17.4ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (3.6ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (14.9ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (38.7ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (4.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (3.7ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (4.3ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (28.0ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (6.0ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (7.6ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (10.8ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (14.8ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (6.2ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (12.1ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (8.3ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (4.6ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (7.0ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (8.1ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (69.5ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (4.3ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (5.3ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:14:49', '2010-07-28 11:14:49', 'Tom')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:14:49', '2010-07-28 11:14:49', 'Jack')[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:14:49', 'Tom post', '2010-07-28 11:14:49', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:14:49', '2010-07-28 11:14:49', 'Tom')[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.2ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:14:49', '2010-07-28 11:14:49', 'Jack')[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:14:49', 'Tom post', '2010-07-28 11:14:49', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:14:49', '2010-07-28 11:14:49', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (1.1ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:14:49', '2010-07-28 11:14:49', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.4ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:14:49', '2010-07-28 11:14:49', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (43.8ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (23.7ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (6.2ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (3.8ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (7.0ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (35.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (9.5ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (6.4ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (9.3ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (4.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:15:54', '2010-07-28 11:15:54', 'Tom')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:15:54', '2010-07-28 11:15:54', 'Jack')[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:15:54', 'Tom post', '2010-07-28 11:15:54', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:15:54', '2010-07-28 11:15:54', 'Tom')[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:15:54', '2010-07-28 11:15:54', 'Jack')[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.4ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:15:54', 'Tom post', '2010-07-28 11:15:54', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:15:54', '2010-07-28 11:15:54', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:15:54', '2010-07-28 11:15:54', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.4ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:15:54', '2010-07-28 11:15:54', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (7.1ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.7ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (9.8ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (20.4ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.6ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (3.5ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (3.0ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (3.6ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.4ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.2ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (3.8ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (15.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (7.9ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (7.5ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (10.0ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (27.0ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (6.9ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (38.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (29.5ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.4ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (3.4ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mPost Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:19:18', 'Tom post', '2010-07-28 11:19:18', NULL, 'post content')[0m
+  [4;36;1mUser Load (20.4ms)[0m   [0;1mSELECT "users".id FROM "users" INNER JOIN "microblog_followings" ON "users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = NULL)) [0m
+  [4;35;1mPost Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:19:18', 'Tom post', '2010-07-28 11:19:18', NULL, 'post content')[0m
+  [4;36;1mMicroblog Create (13.0ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:19:18', '2010-07-28 11:19:18', 'Jack comment', NULL, 'Post', 2)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mMicroblog Create (6.9ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:19:18', '2010-07-28 11:19:18', 'Tom comment', NULL, 'Post', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (14.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (20.2ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (7.8ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (8.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (17.9ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (7.8ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (17.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (13.1ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (15.9ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.8ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (50.0ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (31.2ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (5.6ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:20:27', '2010-07-28 11:20:27', 'Tom', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:20:27', '2010-07-28 11:20:27', 'Jack', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:20:27', 'Tom post', '2010-07-28 11:20:27', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:20:27', '2010-07-28 11:20:27', 'Tom', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.7ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:20:27', '2010-07-28 11:20:27', 'Jack', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (15.1ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:20:27', 'Tom post', '2010-07-28 11:20:27', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.8ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:20:28', '2010-07-28 11:20:28', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (11.6ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:20:28', '2010-07-28 11:20:28', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (5.4ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.5ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:20:28', '2010-07-28 11:20:28', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (4.6ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (16.7ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (5.2ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (4.4ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (5.5ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (6.2ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (37.0ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (33.0ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.8ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.4ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (4.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:21:34', '2010-07-28 11:21:34', 'Tom', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:21:34', '2010-07-28 11:21:34', 'Jack', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:21:34', 'Tom post', '2010-07-28 11:21:34', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (2.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:21:34', '2010-07-28 11:21:34', 'Tom', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:21:34', '2010-07-28 11:21:34', 'Jack', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:21:34', 'Tom post', '2010-07-28 11:21:34', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:21:34', '2010-07-28 11:21:34', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:21:34', '2010-07-28 11:21:34', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.4ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (2.2ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:21:34', '2010-07-28 11:21:34', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.0ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (19.3ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (10.0ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (4.3ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (10.8ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (26.2ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (5.9ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.4ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (35.8ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (28.4ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.5ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:23:33', '2010-07-28 11:23:33', 'Tom', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.2ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:23:33', '2010-07-28 11:23:33', 'Jack', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:23:33', 'Tom post', '2010-07-28 11:23:33', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.5ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:23:33', '2010-07-28 11:23:33', 'Tom', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:23:33', '2010-07-28 11:23:33', 'Jack', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:23:33', 'Tom post', '2010-07-28 11:23:33', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:23:33', '2010-07-28 11:23:33', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.6ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:23:33', '2010-07-28 11:23:33', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:23:33', '2010-07-28 11:23:33', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (18.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (3.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (21.0ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (6.7ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (79.7ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (17.8ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (1.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (15.9ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (40.2ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (113.1ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (17.0ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (13.8ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (30.2ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:26:16', '2010-07-28 11:26:16', 'Tom', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.5ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:26:16', '2010-07-28 11:26:16', 'Jack', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.5ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:26:16', 'Tom post', '2010-07-28 11:26:16', 1, 'post content')[0m
+  [4;36;1mMicroblog Create (0.6ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:26:24', '2010-07-28 11:26:24', 'Jack comment', 2, 'Post', 1)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:26:24', '2010-07-28 11:26:24', 'Tom comment', 1, 'Post', 1)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mMicroblog Load (0.3ms)[0m   [0;1mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 1) LIMIT 1[0m
+  [4;35;1mMicroblog Create (0.5ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:26:24', '2010-07-28 11:26:24', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 1 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.7ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:27:16', '2010-07-28 11:27:16', 'Tom', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.5ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:27:16', '2010-07-28 11:27:16', 'Jack', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:27:16', 'Tom post', '2010-07-28 11:27:16', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:27:16', '2010-07-28 11:27:16', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:27:16', '2010-07-28 11:27:16', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:27:16', '2010-07-28 11:27:16', 'Jack comment for Tom comment', 1, 'Microblog', 5)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 5 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.1ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (34.8ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (3.7ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (4.8ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (16.7ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (4.9ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (16.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (15.3ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (12.2ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (25.4ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (5.5ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:33:32', '2010-07-28 11:33:32', 'Tom', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:33:32', '2010-07-28 11:33:32', 'Jack', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:33:32', 'Tom post', '2010-07-28 11:33:32', 1, 'post content')[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (66.1ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (5.3ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (43.7ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (9.4ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (18.7ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (13.4ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (53.5ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.2ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.1ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (3.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:34:12', '2010-07-28 11:34:12', 'Tom', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:34:12', '2010-07-28 11:34:12', 'Jack', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.2ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:34:12', 'Tom post', '2010-07-28 11:34:12', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:34:12', '2010-07-28 11:34:12', 'Tom', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.6ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:34:12', '2010-07-28 11:34:12', 'Jack', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:34:12', 'Tom post', '2010-07-28 11:34:12', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:34:12', '2010-07-28 11:34:12', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:34:12', '2010-07-28 11:34:12', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:34:12', '2010-07-28 11:34:12', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.1ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (37.3ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (4.0ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (22.0ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (31.6ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (7.8ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (49.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (19.0ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (8.7ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (35.8ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (14.4ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+WARNING: Can't mass-assign these protected attributes: login
+WARNING: Can't mass-assign these protected attributes: login
+  [4;35;1mPost Create (0.7ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:35:58', 'Tom post', '2010-07-28 11:35:58', NULL, 'post content')[0m
+WARNING: Can't mass-assign these protected attributes: login
+WARNING: Can't mass-assign these protected attributes: login
+  [4;36;1mPost Create (7.7ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:35:58', 'Tom post', '2010-07-28 11:35:58', NULL, 'post content')[0m
+  [4;35;1mMicroblog Create (0.6ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:35:58', '2010-07-28 11:35:58', 'Jack comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (36.9ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (13.0ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:35:58', '2010-07-28 11:35:58', 'Tom comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (31.9ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (31.0ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (2.1ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.4ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (4.2ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (22.5ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (68.5ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (37.7ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (13.9ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.3ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (6.2ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+WARNING: Can't mass-assign these protected attributes: login
+WARNING: Can't mass-assign these protected attributes: login
+  [4;35;1mPost Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:36:11', 'Tom post', '2010-07-28 11:36:11', NULL, 'post content')[0m
+WARNING: Can't mass-assign these protected attributes: login
+WARNING: Can't mass-assign these protected attributes: login
+  [4;36;1mPost Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:36:11', 'Tom post', '2010-07-28 11:36:11', NULL, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:36:11', '2010-07-28 11:36:11', 'Jack comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:36:11', '2010-07-28 11:36:11', 'Tom comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (48.6ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (14.3ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (12.6ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (7.5ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (11.2ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (28.1ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (53.2ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (12.6ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (18.2ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (18.8ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+WARNING: Can't mass-assign these protected attributes: login
+WARNING: Can't mass-assign these protected attributes: login
+  [4;35;1mPost Create (0.5ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:36:55', 'Tom post', '2010-07-28 11:36:55', NULL, 'post content')[0m
+WARNING: Can't mass-assign these protected attributes: login
+WARNING: Can't mass-assign these protected attributes: login
+  [4;36;1mPost Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:36:55', 'Tom post', '2010-07-28 11:36:55', NULL, 'post content')[0m
+  [4;35;1mMicroblog Create (0.5ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:36:55', '2010-07-28 11:36:55', 'Jack comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (40.9ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.6ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:36:55', '2010-07-28 11:36:55', 'Tom comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (11.5ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (7.8ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (50.8ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (38.7ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (3.8ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (17.8ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (3.1ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.3ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (4.1ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (58.3ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+WARNING: Can't mass-assign these protected attributes: login
+WARNING: Can't mass-assign these protected attributes: login
+  [4;35;1mPost Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:37:26', 'Tom post', '2010-07-28 11:37:26', NULL, 'post content')[0m
+WARNING: Can't mass-assign these protected attributes: login
+WARNING: Can't mass-assign these protected attributes: login
+  [4;36;1mPost Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:37:27', 'Tom post', '2010-07-28 11:37:27', NULL, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:37:27', '2010-07-28 11:37:27', 'Jack comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:37:27', '2010-07-28 11:37:27', 'Tom comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (41.6ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (10.2ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (4.1ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (10.5ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (8.8ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (20.9ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (19.4ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (9.2ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.6ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (41.7ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (3.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.5ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:43:08', '2010-07-28 11:43:08', 'Tom', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.5ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:43:08', '2010-07-28 11:43:08', 'Jack', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::Post Create (0.8ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:43:08', 'Tom post', '2010-07-28 11:43:08', 1, 'post content')[0m
+  [4;36;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:43:08', '2010-07-28 11:43:08', 'Tom', NULL)[0m
+  [4;35;1mActsAsMicroblogTest::User Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login", "email") VALUES('2010-07-28 11:43:08', '2010-07-28 11:43:08', 'Jack', NULL)[0m
+  [4;36;1mActsAsMicroblogTest::Post Create (0.4ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:43:08', 'Tom post', '2010-07-28 11:43:08', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (1.0ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:43:08', '2010-07-28 11:43:08', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.9ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:43:08', '2010-07-28 11:43:08', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (1.0ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:43:08', '2010-07-28 11:43:08', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.0ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (63.1ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (3.6ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (5.2ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (3.0ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (4.4ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (17.1ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (3.9ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (8.0ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.7ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (3.0ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mPost Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:44:12', 'Tom post', '2010-07-28 11:44:12', NULL, 'post content')[0m
+  [4;36;1mUser Load (0.2ms)[0m   [0;1mSELECT "users".id FROM "users" INNER JOIN "microblog_followings" ON "users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = NULL)) [0m
+  [4;35;1mPost Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:44:12', 'Tom post', '2010-07-28 11:44:12', NULL, 'post content')[0m
+  [4;36;1mMicroblog Create (0.7ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:44:12', '2010-07-28 11:44:12', 'Jack comment', NULL, 'Post', 2)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:44:12', '2010-07-28 11:44:12', 'Tom comment', NULL, 'Post', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (56.5ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (3.6ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (7.8ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (4.0ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (6.7ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (6.1ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (3.4ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (12.3ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (37.5ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (3.5ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mPost Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:46:14', 'Tom post', '2010-07-28 11:46:14', NULL, 'post content')[0m
+  [4;36;1mPost Create (0.6ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:46:14', 'Tom post', '2010-07-28 11:46:14', NULL, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:46:14', '2010-07-28 11:46:14', 'Jack comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:46:14', '2010-07-28 11:46:14', 'Tom comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (19.8ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (46.7ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "email" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (3.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (9.0ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (29.7ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (31.3ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (4.0ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (45.3ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.7ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.5ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (3.4ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mPost Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:50:16', 'Tom post', '2010-07-28 11:50:16', NULL, 'post content')[0m
+  [4;36;1mPost Create (0.5ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:50:16', 'Tom post', '2010-07-28 11:50:16', NULL, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:50:16', '2010-07-28 11:50:16', 'Jack comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:50:16', '2010-07-28 11:50:16', 'Tom comment', NULL, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (9.4ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.7ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (27.2ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (3.1ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (3.0ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (2.6ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.5ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (51.1ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (10.8ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+WARNING: Can't mass-assign these protected attributes: id
+WARNING: Can't mass-assign these protected attributes: id
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.0ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (33.1ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (9.5ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (34.8ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (58.9ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (78.2ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (31.8ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (3.5ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (2.9ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (15.6ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (6.3ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (40.0ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (18.6ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (14.4ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (21.8ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (24.3ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (3.4ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (25.4ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (13.6ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (12.2ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (12.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;35;1mAAMBUser Create (0.5ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:57:11', '2010-07-28 11:57:11', 'Tom')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;36;1mAAMBUser Create (0.5ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:57:11', '2010-07-28 11:57:11', 'Jack')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;35;1mAAMBPost Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:57:11', 'Tom post', '2010-07-28 11:57:11', 1, 'post content')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;36;1mAAMBUser Create (0.5ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:57:11', '2010-07-28 11:57:11', 'Tom')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;35;1mAAMBUser Create (1.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 11:57:11', '2010-07-28 11:57:11', 'Jack')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;36;1mAAMBPost Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 11:57:11', 'Tom post', '2010-07-28 11:57:11', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:57:11', '2010-07-28 11:57:11', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:57:11', '2010-07-28 11:57:11', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 11:57:11', '2010-07-28 11:57:11', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (7.9ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (2.8ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.0ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (2.6ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (48.1ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (3.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (10.6ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (13.8ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (28.4ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (16.2ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (7.8ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (2.9ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (4.3ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (2.7ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (12.0ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (40.3ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (39.1ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.2ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (10.9ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (5.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;35;1mZhrUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:00:16', '2010-07-28 12:00:16', 'Tom')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;36;1mZhrUser Create (0.5ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:00:16', '2010-07-28 12:00:16', 'Jack')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;35;1mZhrPost Create (0.3ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:00:16', 'Tom post', '2010-07-28 12:00:16', 1, 'post content')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;36;1mZhrUser Create (0.5ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:00:16', '2010-07-28 12:00:16', 'Tom')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;35;1mZhrUser Create (2.2ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:00:16', '2010-07-28 12:00:16', 'Jack')[0m
+WARNING: Can't mass-assign these protected attributes: id
+  [4;36;1mZhrPost Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:00:16', 'Tom post', '2010-07-28 12:00:16', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:00:16', '2010-07-28 12:00:16', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:00:16', '2010-07-28 12:00:16', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:00:16', '2010-07-28 12:00:16', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (46.0ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (10.2ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (53.0ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (15.7ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (23.5ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (4.7ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (8.1ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (6.7ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (18.9ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (26.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mZhrUser Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:01:46', '2010-07-28 12:01:46', 'Tom')[0m
+  [4;36;1mZhrUser Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:01:46', '2010-07-28 12:01:46', 'Jack')[0m
+  [4;35;1mZhrPost Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:01:46', 'Tom post', '2010-07-28 12:01:46', 1, 'post content')[0m
+  [4;36;1mZhrUser Create (0.6ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:01:46', '2010-07-28 12:01:46', 'Tom')[0m
+  [4;35;1mZhrUser Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:01:46', '2010-07-28 12:01:46', 'Jack')[0m
+  [4;36;1mZhrPost Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:01:46', 'Tom post', '2010-07-28 12:01:46', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:01:46', '2010-07-28 12:01:46', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:01:46', '2010-07-28 12:01:46', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.4ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:01:46', '2010-07-28 12:01:46', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (22.9ms)[0m   [0;1mDROP TABLE "users"[0m
+  [4;35;1mSQL (3.2ms)[0m   [0mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (55.8ms)[0m   [0mDROP TABLE "posts"[0m
+  [4;36;1mSQL (18.2ms)[0m   [0;1mCREATE TABLE "posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (3.0ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (3.2ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (3.4ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (23.2ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (82.4ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (3.4ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (0.3ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:05:54', '2010-07-28 12:05:54', 'Tom')[0m
+  [4;36;1mFooUser Create (0.4ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:05:54', '2010-07-28 12:05:54', 'Jack')[0m
+  [4;35;1mFooPost Create (0.4ms)[0m   [0mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:05:54', 'Tom post', '2010-07-28 12:05:54', 1, 'post content')[0m
+  [4;36;1mFooUser Create (0.3ms)[0m   [0;1mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:05:54', '2010-07-28 12:05:54', 'Tom')[0m
+  [4;35;1mFooUser Create (0.4ms)[0m   [0mINSERT INTO "users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:05:54', '2010-07-28 12:05:54', 'Jack')[0m
+  [4;36;1mFooPost Create (0.3ms)[0m   [0;1mINSERT INTO "posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:05:54', 'Tom post', '2010-07-28 12:05:54', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:05:54', '2010-07-28 12:05:54', 'Jack comment', 4, 'Post', 2)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:05:54', '2010-07-28 12:05:54', 'Tom comment', 3, 'Post', 2)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.5ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:05:54', '2010-07-28 12:05:54', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Post')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (18.2ms)[0m   [0;1mCREATE TABLE "foo_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (43.2ms)[0m   [0;1mCREATE TABLE "foo_posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (11.8ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (3.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (17.6ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (70.5ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (3.6ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (28.7ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (0.3ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:07:23', '2010-07-28 12:07:23', 'Tom')[0m
+  [4;36;1mFooUser Create (0.4ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:07:23', '2010-07-28 12:07:23', 'Jack')[0m
+  [4;35;1mFooPost Create (0.3ms)[0m   [0mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:07:23', 'Tom post', '2010-07-28 12:07:23', 1, 'post content')[0m
+  [4;36;1mMicroblogFollowing Create (0.3ms)[0m   [0;1mINSERT INTO "microblog_followings" ("created_at", "updated_at", "follower_id", "author_id") VALUES('2010-07-28 12:07:23', '2010-07-28 12:07:23', 1, 2)[0m
+  [4;35;1mFooUser Load (0.3ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.2ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.2ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mMicroblogFollowing Delete all (0.3ms)[0m   [0;1mDELETE FROM "microblog_followings" WHERE ("microblog_followings"."follower_id" = 1 AND "microblog_followings"."author_id" = 2) [0m
+  [4;35;1mFooUser Load (0.2ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.1ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.3ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mFooUser Create (0.3ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:07:23', '2010-07-28 12:07:23', 'Tom')[0m
+  [4;35;1mFooUser Create (0.3ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:07:23', '2010-07-28 12:07:23', 'Jack')[0m
+  [4;36;1mFooPost Create (0.3ms)[0m   [0;1mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:07:23', 'Tom post', '2010-07-28 12:07:23', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:07:23', '2010-07-28 12:07:23', 'Jack comment', 4, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:07:23', '2010-07-28 12:07:23', 'Tom comment', 3, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.4ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:07:23', '2010-07-28 12:07:23', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (1.8ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.1ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (9.9ms)[0m   [0;1mDROP TABLE "foo_users"[0m
+  [4;35;1mSQL (2.8ms)[0m   [0mCREATE TABLE "foo_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (48.4ms)[0m   [0mDROP TABLE "foo_posts"[0m
+  [4;36;1mSQL (4.6ms)[0m   [0;1mCREATE TABLE "foo_posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (5.5ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (4.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (4.2ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (3.8ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (28.2ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (4.9ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (0.3ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:10:49', '2010-07-28 12:10:49', 'Tom')[0m
+  [4;36;1mFooUser Create (0.2ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:10:49', '2010-07-28 12:10:49', 'Jack')[0m
+  [4;35;1mFooPost Create (0.3ms)[0m   [0mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:10:49', 'Tom post', '2010-07-28 12:10:49', 1, 'post content')[0m
+  [4;36;1mMicroblogFollowing Create (2.7ms)[0m   [0;1mINSERT INTO "microblog_followings" ("created_at", "updated_at", "follower_id", "author_id") VALUES('2010-07-28 12:10:49', '2010-07-28 12:10:49', 1, 2)[0m
+  [4;35;1mFooUser Load (0.3ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.4ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.3ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mMicroblogFollowing Delete all (0.3ms)[0m   [0;1mDELETE FROM "microblog_followings" WHERE ("microblog_followings"."follower_id" = 1 AND "microblog_followings"."author_id" = 2) [0m
+  [4;35;1mFooUser Load (0.2ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.1ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.1ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mFooUser Create (1.6ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:10:49', '2010-07-28 12:10:49', 'Tom')[0m
+  [4;35;1mFooUser Create (0.4ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:10:49', '2010-07-28 12:10:49', 'Jack')[0m
+  [4;36;1mFooPost Create (0.3ms)[0m   [0;1mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:10:49', 'Tom post', '2010-07-28 12:10:49', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:10:49', '2010-07-28 12:10:49', 'Jack comment', 4, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:10:49', '2010-07-28 12:10:49', 'Tom comment', 3, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Load (0.3ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.4ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:10:49', '2010-07-28 12:10:49', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (1.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (9.1ms)[0m   [0;1mDROP TABLE "foo_users"[0m
+  [4;35;1mSQL (2.9ms)[0m   [0mCREATE TABLE "foo_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (36.8ms)[0m   [0mDROP TABLE "foo_posts"[0m
+  [4;36;1mSQL (31.9ms)[0m   [0;1mCREATE TABLE "foo_posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (4.2ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (5.3ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (3.4ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (53.3ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (12.7ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (6.7ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.4ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (1.4ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (0.3ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:29:09', '2010-07-28 12:29:09', 'Tom')[0m
+  [4;36;1mFooUser Create (0.3ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:29:09', '2010-07-28 12:29:09', 'Jack')[0m
+  [4;35;1mFooPost Create (2.4ms)[0m   [0mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:29:09', 'Tom post', '2010-07-28 12:29:09', 1, 'post content')[0m
+  [4;36;1mMicroblogFollowing Create (0.4ms)[0m   [0;1mINSERT INTO "microblog_followings" ("created_at", "updated_at", "follower_id", "author_id") VALUES('2010-07-28 12:29:09', '2010-07-28 12:29:09', 1, 2)[0m
+  [4;35;1mFooUser Load (0.3ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.3ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.2ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mMicroblogFollowing Delete all (0.3ms)[0m   [0;1mDELETE FROM "microblog_followings" WHERE ("microblog_followings"."follower_id" = 1 AND "microblog_followings"."author_id" = 2) [0m
+  [4;35;1mFooUser Load (0.2ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.2ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.2ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mFooUser Create (0.3ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:29:09', '2010-07-28 12:29:09', 'Tom')[0m
+  [4;35;1mFooUser Create (0.3ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:29:09', '2010-07-28 12:29:09', 'Jack')[0m
+  [4;36;1mFooPost Create (0.3ms)[0m   [0;1mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:29:09', 'Tom post', '2010-07-28 12:29:09', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (0.3ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:29:09', '2010-07-28 12:29:09', 'Jack comment', 4, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Create (0.4ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:29:09', '2010-07-28 12:29:09', 'Tom comment', 3, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Load (0.8ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.3ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:29:09', '2010-07-28 12:29:09', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (91.2ms)[0m   [0;1mDROP TABLE "foo_users"[0m
+  [4;35;1mSQL (43.1ms)[0m   [0mCREATE TABLE "foo_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (6.8ms)[0m   [0mDROP TABLE "foo_posts"[0m
+  [4;36;1mSQL (3364.0ms)[0m   [0;1mCREATE TABLE "foo_posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (174.6ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (101.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (41.3ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (23.3ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (28.9ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (49.4ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (0.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (0.4ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:30:29', '2010-07-28 12:30:29', 'Tom')[0m
+  [4;36;1mFooUser Create (1.0ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:30:30', '2010-07-28 12:30:30', 'Jack')[0m
+  [4;35;1mFooPost Create (0.7ms)[0m   [0mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:30:30', 'Tom post', '2010-07-28 12:30:30', 1, 'post content')[0m
+  [4;36;1mMicroblogFollowing Create (0.8ms)[0m   [0;1mINSERT INTO "microblog_followings" ("created_at", "updated_at", "follower_id", "author_id") VALUES('2010-07-28 12:30:30', '2010-07-28 12:30:30', 1, 2)[0m
+  [4;35;1mFooUser Load (0.7ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.6ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.5ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mMicroblogFollowing Delete all (0.8ms)[0m   [0;1mDELETE FROM "microblog_followings" WHERE ("microblog_followings"."follower_id" = 1 AND "microblog_followings"."author_id" = 2) [0m
+  [4;35;1mFooUser Load (0.5ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.6ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.5ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mFooUser Create (1.9ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:30:30', '2010-07-28 12:30:30', 'Tom')[0m
+  [4;35;1mFooUser Create (0.7ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 12:30:30', '2010-07-28 12:30:30', 'Jack')[0m
+  [4;36;1mFooPost Create (0.6ms)[0m   [0;1mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 12:30:30', 'Tom post', '2010-07-28 12:30:30', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (1.0ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:30:30', '2010-07-28 12:30:30', 'Jack comment', 4, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Create (1.0ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:30:30', '2010-07-28 12:30:30', 'Tom comment', 3, 'FooPost', 2)[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Load (0.7ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (1.5ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 12:30:30', '2010-07-28 12:30:30', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;36;1mSQL (1.6ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (26.1ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (17.3ms)[0m   [0;1mDROP TABLE "foo_users"[0m
+  [4;35;1mSQL (35.9ms)[0m   [0mCREATE TABLE "foo_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (1.7ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (53.9ms)[0m   [0mDROP TABLE "foo_posts"[0m
+  [4;36;1mSQL (18.4ms)[0m   [0;1mCREATE TABLE "foo_posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (1.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (17.8ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (71.4ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (34.4ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (6.9ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (43.3ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (48.1ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (87.8ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (3.1ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (8.6ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (1.1ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 14:38:47', '2010-07-28 14:38:47', 'Tom')[0m
+  [4;36;1mFooUser Create (15.5ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 14:38:47', '2010-07-28 14:38:47', 'Jack')[0m
+  [4;35;1mFooPost Create (1.8ms)[0m   [0mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 14:38:47', 'Tom post', '2010-07-28 14:38:47', 1, 'post content')[0m
+  [4;36;1mMicroblogFollowing Create (8.3ms)[0m   [0;1mINSERT INTO "microblog_followings" ("created_at", "updated_at", "follower_id", "author_id") VALUES('2010-07-28 14:38:48', '2010-07-28 14:38:48', 1, 2)[0m
+  [4;35;1mFooUser Load (1.1ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (5.8ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (14.9ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mMicroblogFollowing Delete all (1.2ms)[0m   [0;1mDELETE FROM "microblog_followings" WHERE ("microblog_followings"."follower_id" = 1 AND "microblog_followings"."author_id" = 2) [0m
+  [4;35;1mFooUser Load (0.7ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.6ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.8ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mFooUser Create (1.0ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 14:38:48', '2010-07-28 14:38:48', 'Tom')[0m
+  [4;35;1mFooUser Create (12.4ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-28 14:38:48', '2010-07-28 14:38:48', 'Jack')[0m
+  [4;36;1mFooPost Create (1.0ms)[0m   [0;1mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-28 14:38:48', 'Tom post', '2010-07-28 14:38:48', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (1.7ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 14:38:48', '2010-07-28 14:38:48', 'Jack comment', 4, 'FooPost', 2)[0m
+  [4;36;1mSQL (14.7ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Create (1.1ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 14:38:48', '2010-07-28 14:38:48', 'Tom comment', 3, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Load (0.9ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (0.9ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-28 14:38:48', '2010-07-28 14:38:48', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;36;1mSQL (7.0ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (30.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (241.6ms)[0m   [0;1mDROP TABLE "foo_users"[0m
+  [4;35;1mSQL (541.8ms)[0m   [0mCREATE TABLE "foo_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (1.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (37.6ms)[0m   [0mDROP TABLE "foo_posts"[0m
+  [4;36;1mSQL (16.6ms)[0m   [0;1mCREATE TABLE "foo_posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (1.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (45.6ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (21.2ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (36.0ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (10.9ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (16.1ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (39.8ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (1.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (2.8ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 05:39:39', '2010-07-30 05:39:39', 'Tom')[0m
+  [4;36;1mFooUser Create (2.0ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 05:39:39', '2010-07-30 05:39:39', 'Jack')[0m
+  [4;35;1mFooPost Create (2.6ms)[0m   [0mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-30 05:39:39', 'Tom post', '2010-07-30 05:39:39', 1, 'post content')[0m
+  [4;36;1mMicroblogFollowing Create (4.7ms)[0m   [0;1mINSERT INTO "microblog_followings" ("created_at", "updated_at", "follower_id", "author_id") VALUES('2010-07-30 05:39:39', '2010-07-30 05:39:39', 1, 2)[0m
+  [4;35;1mFooUser Load (1.1ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (1.6ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (2.6ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mMicroblogFollowing Delete all (2.0ms)[0m   [0;1mDELETE FROM "microblog_followings" WHERE ("microblog_followings"."follower_id" = 1 AND "microblog_followings"."author_id" = 2) [0m
+  [4;35;1mFooUser Load (0.6ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.5ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.5ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mFooUser Create (1.3ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 05:39:40', '2010-07-30 05:39:40', 'Tom')[0m
+  [4;35;1mFooUser Create (2.8ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 05:39:40', '2010-07-30 05:39:40', 'Jack')[0m
+  [4;36;1mFooPost Create (2.6ms)[0m   [0;1mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-30 05:39:40', 'Tom post', '2010-07-30 05:39:40', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (2.8ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 05:39:40', '2010-07-30 05:39:40', 'Jack comment', 4, 'FooPost', 2)[0m
+  [4;36;1mSQL (42.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Create (2.1ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 05:39:40', '2010-07-30 05:39:40', 'Tom comment', 3, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Load (1.1ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (2.6ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 05:39:40', '2010-07-30 05:39:40', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;36;1mSQL (4.9ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (4.9ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (120.8ms)[0m   [0;1mDROP TABLE "foo_users"[0m
+  [4;35;1mSQL (66.2ms)[0m   [0mCREATE TABLE "foo_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (212.4ms)[0m   [0mDROP TABLE "foo_posts"[0m
+  [4;36;1mSQL (208.9ms)[0m   [0;1mCREATE TABLE "foo_posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (1.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (259.7ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (75.6ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (109.6ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (219.6ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (58.1ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.4ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (74.7ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (18.5ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (4.7ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 06:29:01', '2010-07-30 06:29:01', 'Tom')[0m
+  [4;36;1mFooUser Create (1.0ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 06:29:01', '2010-07-30 06:29:01', 'Jack')[0m
+  [4;35;1mFooPost Create (1.7ms)[0m   [0mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-30 06:29:01', 'Tom post', '2010-07-30 06:29:01', 1, 'post content')[0m
+  [4;36;1mMicroblogFollowing Create (1.1ms)[0m   [0;1mINSERT INTO "microblog_followings" ("created_at", "updated_at", "follower_id", "author_id") VALUES('2010-07-30 06:29:02', '2010-07-30 06:29:02', 1, 2)[0m
+  [4;35;1mFooUser Load (1.8ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.8ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.7ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mMicroblogFollowing Delete all (0.9ms)[0m   [0;1mDELETE FROM "microblog_followings" WHERE ("microblog_followings"."follower_id" = 1 AND "microblog_followings"."author_id" = 2) [0m
+  [4;35;1mFooUser Load (1.3ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.9ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.5ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mFooUser Create (1.0ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 06:29:02', '2010-07-30 06:29:02', 'Tom')[0m
+  [4;35;1mFooUser Create (0.8ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 06:29:02', '2010-07-30 06:29:02', 'Jack')[0m
+  [4;36;1mFooPost Create (2.1ms)[0m   [0;1mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-30 06:29:02', 'Tom post', '2010-07-30 06:29:02', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (1.1ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 06:29:02', '2010-07-30 06:29:02', 'Jack comment', 4, 'FooPost', 2)[0m
+  [4;36;1mSQL (3.4ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Create (2.1ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 06:29:02', '2010-07-30 06:29:02', 'Tom comment', 3, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Load (1.8ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (1.0ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 06:29:02', '2010-07-30 06:29:02', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (1.8ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mselect sqlite_version(*)[0m
+  [4;35;1mSQL (3.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (174.6ms)[0m   [0;1mDROP TABLE "foo_users"[0m
+  [4;35;1mSQL (20.0ms)[0m   [0mCREATE TABLE "foo_users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "login" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (68.4ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (64.8ms)[0m   [0mDROP TABLE "foo_posts"[0m
+  [4;36;1mSQL (127.4ms)[0m   [0;1mCREATE TABLE "foo_posts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "title" varchar(255), "content" text, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (1.3ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (200.1ms)[0m   [0;1mDROP TABLE "microblogs"[0m
+  [4;35;1mSQL (156.1ms)[0m   [0mCREATE TABLE "microblogs" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "content" varchar(255), "record_belongs_to" varchar(255), "record_foreign_key" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mPRAGMA index_list("microblogs")[0m
+  [4;35;1mSQL (77.4ms)[0m   [0mCREATE INDEX "index_microblogs_on_record_belongs_to_and_record_foreign_key" ON "microblogs" ("record_belongs_to", "record_foreign_key")[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;35;1mSQL (37.5ms)[0m   [0mDROP TABLE "microblog_followings"[0m
+  [4;36;1mSQL (64.6ms)[0m   [0;1mCREATE TABLE "microblog_followings" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_id" integer, "follower_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mPRAGMA index_list("microblog_followings")[0m
+  [4;36;1mSQL (141.1ms)[0m   [0;1mCREATE UNIQUE INDEX "index_microblog_followings_on_follower_id_and_author_id" ON "microblog_followings" ("follower_id", "author_id")[0m
+  [4;35;1mSQL (1.2ms)[0m   [0m SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSELECT version FROM "schema_migrations"[0m
+  [4;35;1mFooUser Create (1.1ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 06:30:24', '2010-07-30 06:30:24', 'Tom')[0m
+  [4;36;1mFooUser Create (1.5ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 06:30:24', '2010-07-30 06:30:24', 'Jack')[0m
+  [4;35;1mFooPost Create (1.1ms)[0m   [0mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-30 06:30:24', 'Tom post', '2010-07-30 06:30:24', 1, 'post content')[0m
+  [4;36;1mMicroblogFollowing Create (1.1ms)[0m   [0;1mINSERT INTO "microblog_followings" ("created_at", "updated_at", "follower_id", "author_id") VALUES('2010-07-30 06:30:24', '2010-07-30 06:30:24', 1, 2)[0m
+  [4;35;1mFooUser Load (0.9ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (0.7ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (0.6ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mMicroblogFollowing Delete all (1.1ms)[0m   [0;1mDELETE FROM "microblog_followings" WHERE ("microblog_followings"."follower_id" = 1 AND "microblog_followings"."author_id" = 2) [0m
+  [4;35;1mFooUser Load (0.8ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE ("foo_users"."id" = 1) AND (("microblog_followings".author_id = 2)) LIMIT 1[0m
+  [4;36;1mFooUser Load (4.5ms)[0m   [0;1mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".author_id WHERE (("microblog_followings".follower_id = 1)) [0m
+  [4;35;1mFooUser Load (2.6ms)[0m   [0mSELECT "foo_users".id FROM "foo_users" INNER JOIN "microblog_followings" ON "foo_users".id = "microblog_followings".follower_id WHERE (("microblog_followings".author_id = 2)) [0m
+  [4;36;1mFooUser Create (1.4ms)[0m   [0;1mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 06:30:25', '2010-07-30 06:30:25', 'Tom')[0m
+  [4;35;1mFooUser Create (1.0ms)[0m   [0mINSERT INTO "foo_users" ("created_at", "updated_at", "login") VALUES('2010-07-30 06:30:25', '2010-07-30 06:30:25', 'Jack')[0m
+  [4;36;1mFooPost Create (1.0ms)[0m   [0;1mINSERT INTO "foo_posts" ("created_at", "title", "updated_at", "user_id", "content") VALUES('2010-07-30 06:30:25', 'Tom post', '2010-07-30 06:30:25', 3, 'post content')[0m
+  [4;35;1mMicroblog Create (1.1ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 06:30:25', '2010-07-30 06:30:25', 'Jack comment', 4, 'FooPost', 2)[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Create (1.8ms)[0m   [0mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 06:30:25', '2010-07-30 06:30:25', 'Tom comment', 3, 'FooPost', 2)[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m
+  [4;35;1mMicroblog Load (2.2ms)[0m   [0mSELECT * FROM "microblogs" WHERE ("microblogs".author_id = 3) LIMIT 1[0m
+  [4;36;1mMicroblog Create (2.4ms)[0m   [0;1mINSERT INTO "microblogs" ("created_at", "updated_at", "content", "author_id", "record_belongs_to", "record_foreign_key") VALUES('2010-07-30 06:30:25', '2010-07-30 06:30:25', 'Jack comment for Tom comment', 1, 'Microblog', 2)[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'Microblog')) [0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSELECT count(*) AS count_all FROM "microblogs" WHERE ("microblogs".record_foreign_key = 2 AND ("microblogs"."record_belongs_to" = 'FooPost')) [0m

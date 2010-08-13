@@ -1,0 +1,8 @@
+Description:
+    Adds a microblog's migration file.
+
+Example:
+    ./script/generate microblog
+
+    This will create:
+         db/migrate/20100730062124_create_microblogs_and_microblog_followings.rb
