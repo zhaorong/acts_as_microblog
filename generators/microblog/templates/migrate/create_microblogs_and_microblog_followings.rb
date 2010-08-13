@@ -1,7 +1,7 @@
 class CreateMicroblogsAndMicroblogFollowings < ActiveRecord::Migration
   def self.up
     create_table :microblogs do |t|
-      t.integer :user_id
+      t.integer :author_id
       t.string :content
       t.string :record_belongs_to
       t.integer :record_foreign_key
