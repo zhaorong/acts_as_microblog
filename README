@@ -3,6 +3,10 @@ ActsAsMicroblog
 
 Introduction goes here.
 
+Install
+=======
+ruby script/plugin install git@github.com:zhaorong/acts_as_microblog.git
+
 Usage
 =====
 
